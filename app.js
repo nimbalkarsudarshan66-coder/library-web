@@ -471,6 +471,8 @@ function openPaymentModal(data) {
     '₹' + Number(data.amount).toLocaleString('en-IN');
   document.getElementById('upi-payee-name').textContent  = data.payee_name;
   document.getElementById('upi-order-ref').textContent   = data.order_ref;
+  document.getElementById('upi-fail-title').textContent = 'Payment Failed';
+  document.getElementById('upi-fail-msg').textContent   = 'We could not verify your payment. The booking slot has been released.';
 
   switchPaymentState('scan');
 
@@ -714,7 +716,11 @@ function closePaymentModal() {
 
 function switchPaymentState(id) {
   ['scan','submitting','pending','success','failed'].forEach(s => {
-    document.getElementById(`upi-state-${s}`)?.classList.toggle('hidden', s !== id);
+    const section = document.getElementById(`upi-state-${s}`);
+    if (!section) return;
+    const shouldHide = s !== id;
+    section.classList.toggle('hidden', shouldHide);
+    section.setAttribute('aria-hidden', String(shouldHide));
   });
 }
 

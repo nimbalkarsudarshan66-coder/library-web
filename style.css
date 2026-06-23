@@ -29,10 +29,72 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Space Grotesk', sans-serif;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(124, 58, 237, 0.35), transparent 28%),
+    radial-gradient(circle at 84% 24%, rgba(37, 99, 235, 0.3), transparent 30%),
+    radial-gradient(circle at 48% 82%, rgba(16, 185, 129, 0.22), transparent 26%),
+    linear-gradient(135deg, #060610 0%, #0a0a12 36%, #11112a 66%, #05050b 100%);
+  background-attachment: fixed;
+  background-size: 140% 140%;
   color: var(--text);
   min-height: 100vh;
   overflow-x: hidden;
+  animation: cosmicBgRotate 24s ease-in-out infinite alternate;
+  isolation: isolate;
+}
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+body::before {
+  z-index: 0;
+  opacity: 0.55;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.95) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(167,139,250,0.85) 0 1px, transparent 1.6px),
+    radial-gradient(circle, rgba(96,165,250,0.8) 0 1px, transparent 1.5px);
+  background-position: 0 0, 34px 58px, 92px 24px;
+  background-size: 118px 118px, 166px 166px, 226px 226px;
+  animation: starDrift 46s linear infinite;
+}
+body::after {
+  z-index: 0;
+  opacity: 0.75;
+  background-image:
+    linear-gradient(115deg, transparent 0 36%, rgba(255,255,255,0.95) 44%, rgba(167,139,250,0.55) 52%, transparent 66%),
+    linear-gradient(115deg, transparent 0 38%, rgba(255,255,255,0.85) 46%, rgba(96,165,250,0.5) 54%, transparent 68%),
+    linear-gradient(115deg, transparent 0 40%, rgba(255,255,255,0.75) 48%, rgba(16,185,129,0.42) 56%, transparent 70%);
+  background-repeat: no-repeat;
+  background-size: 190px 2px, 150px 2px, 120px 2px;
+  background-position: 115% 12%, 132% 46%, 108% 72%;
+  filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.9));
+  animation: meteorFall 7.5s linear infinite;
+}
+
+@keyframes cosmicBgRotate {
+  0%   { background-position: 0% 45%; }
+  50%  { background-position: 100% 55%; }
+  100% { background-position: 30% 100%; }
+}
+
+@keyframes starDrift {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to   { transform: translate3d(-90px, 70px, 0) rotate(0.01deg); }
+}
+
+@keyframes meteorFall {
+  0% {
+    background-position: 118% 10%, 140% 44%, 112% 74%;
+    opacity: 0;
+  }
+  8%, 70% { opacity: 0.75; }
+  100% {
+    background-position: -30% 70%, -18% 102%, -35% 128%;
+    opacity: 0;
+  }
 }
 
 /* ===== BACKGROUND ORBS ===== */
@@ -51,6 +113,15 @@ body {
 @keyframes orbFloat {
   from { transform: translate(0, 0) scale(1); }
   to   { transform: translate(30px, 20px) scale(1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  body::before,
+  body::after,
+  .orb {
+    animation: none !important;
+  }
 }
 
 /* ===== PAGES ===== */
@@ -837,6 +908,7 @@ body {
 
 /* State containers */
 .upi-state { padding: 20px 24px 28px; }
+.upi-state.hidden { display: none !important; }
 
 /* Countdown timer */
 .upi-timer-wrap { margin-bottom: 16px; }
@@ -1291,17 +1363,67 @@ body {
   .upi-apps-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .upi-app-btn { padding: 10px 4px; font-size: 10px; }
   .upi-app-icon { width: 30px; height: 30px; font-size: 13px; }
+  .date-time-bar { flex-direction: column; padding: 16px; }
+  .dt-group { min-width: 0; width: 100%; }
+  .tables-inline { justify-content: center; }
+  .summary-inner { align-items: stretch; }
+  .summary-inner .btn-cta { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
   .preview-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
   .navbar .logo-text { font-size: 18px; }
   .hero-title { font-size: 30px; }
+  .navbar { align-items: flex-start; gap: 12px; flex-direction: column; }
+  .nav-actions { width: 100%; flex-wrap: wrap; }
+  .nav-actions button { flex: 1 1 auto; }
+  .hero { padding: 0 16px; }
+  .hero-subtitle { font-size: 15px; }
+  .booking-container { padding: 24px 12px 180px; }
+  .section-title { font-size: 28px; }
+  .library-map { padding: 14px 10px; }
+  .table-3d,
+  .table-top { width: 64px; }
+  .large-table .table-3d,
+  .large-table .table-top { width: 84px; }
   .upi-amount { font-size: 32px; }
+  .upi-modal-sheet {
+    border-radius: 20px 20px 0 0;
+    max-height: 100dvh;
+  }
+  .upi-modal-header { padding: 8px 16px 16px; }
+  .upi-state { padding: 16px 16px 22px; }
+  .upi-qr-canvas {
+    width: min(220px, 72vw);
+    height: min(220px, 72vw);
+    min-height: 0;
+  }
+  .upi-qr-canvas canvas,
+  .upi-qr-canvas img {
+    max-width: 100%;
+    height: auto !important;
+  }
   .upi-apps-grid { grid-template-columns: repeat(2, 1fr); }
+  .upi-utr-section { padding: 14px; }
+  .upi-utr-input { font-size: 16px; letter-spacing: 1px; }
+  .upi-pending-row,
+  .upi-receipt-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
   .upi-state-actions { flex-direction: column; }
   .upi-state-actions .btn-cta,
   .upi-state-actions .btn-ghost { width: 100%; }
+  .toast {
+    bottom: 18px;
+    left: 12px;
+    right: 12px;
+    transform: translateY(20px);
+    white-space: normal;
+    text-align: center;
+  }
+  .toast.show { transform: translateY(0); }
 }
 
 /* ===== SCROLLBAR ===== */
