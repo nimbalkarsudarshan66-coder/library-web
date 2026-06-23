@@ -1,0 +1,10 @@
+<?php require __DIR__ . '/db.php';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $id=(int)($_POST['table_id']??0); $status=$_POST['status']??'available';
+  if (in_array($status,['available','booked','maintenance'],true)) { $s=$conn->prepare('UPDATE study_tables SET status=? WHERE id=?'); $s->bind_param('si',$status,$id); $s->execute(); }
+  if (isset($_POST['free_reservation'])) { $rid=(int)$_POST['free_reservation']; $conn->query("UPDATE reservations SET reservation_status='cancelled' WHERE id=$rid"); }
+}
+$tables=$conn->query('SELECT * FROM study_tables ORDER BY id');
+$res=$conn->query("SELECT r.*, u.full_name, t.zone FROM reservations r LEFT JOIN users u ON u.id=r.user_id JOIN study_tables t ON t.id=r.table_id ORDER BY r.created_at DESC LIMIT 50");
+?>
+<!doctype html><html><head><title>Saraswati Admin</title><link rel="stylesheet" href="style.css"></head><body><div class="admin-shell"><h1>Admin Control Panel</h1><p>Change table permissions/status for window side, silent, group and power zones. Free or alter reservations.</p><h2>Tables</h2><div class="admin-grid"><?php while($t=$tables->fetch_assoc()): ?><form method="post" class="admin-card"><b>T<?= $t['id'] ?> · <?= htmlspecialchars($t['zone']) ?></b><small><?= htmlspecialchars($t['features']) ?></small><input type="hidden" name="table_id" value="<?= $t['id'] ?>"><select name="status"><option <?= $t['status']=='available'?'selected':'' ?>>available</option><option <?= $t['status']=='booked'?'selected':'' ?>>booked</option><option <?= $t['status']=='maintenance'?'selected':'' ?>>maintenance</option></select><button class="btn-primary">Update</button></form><?php endwhile; ?></div><h2>Reservations</h2><div class="admin-list"><?php while($r=$res->fetch_assoc()): ?><form method="post" class="admin-row"><span>#<?= $r['id'] ?> T<?= $r['table_id'] ?> <?= htmlspecialchars($r['booking_date']) ?> <?= htmlspecialchars($r['time_slot']) ?> · <?= htmlspecialchars($r['payment_status']) ?> · <?= htmlspecialchars($r['reservation_status']) ?></span><button name="free_reservation" value="<?= $r['id'] ?>" class="btn-ghost">Free table</button></form><?php endwhile; ?></div></div></body></html>

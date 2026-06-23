@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>saraswati library — Table Booking</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:wght@700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HERO / LANDING PAGE -->
+  <div id="page-landing" class="page active">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions" id="nav-actions-landing">
+        <button class="btn-ghost" onclick="showAdminPage()">Admin Panel</button>
+        <button class="btn-ghost" onclick="showPage('page-login')">Sign In</button>
+        <button class="btn-primary" onclick="showPage('page-register')">Register</button>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-badge">✦ 39 Premium Study Spaces</div>
+      <h1 class="hero-title">Reserve Your <span class="gradient-text">Perfect Spot</span> in the Library</h1>
+      <p class="hero-subtitle">Choose your table like a RedBus seat map, subscribe, pay with PhonePe, and walk in ready to focus. AC room, special spotlight, free WiFi, and laptop charging points included.</p>
+      <div class="hero-actions">
+        <button class="btn-cta" onclick="showPage('page-booking')">
+          <span>Browse Tables</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">39</span><span class="stat-label">Tables</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-num">8AM</span><span class="stat-label">Opens</span></div>
+          <div class="stat-div"></div>
+          <div class="stat"><span class="stat-num">10PM</span><span class="stat-label">Closes</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3D Library Preview Cards -->
+    <div class="preview-cards">
+      <div class="card-3d zone-card" style="--delay:0s">
+        <div class="zone-icon">🪟</div>
+        <div class="zone-name">Window Zone</div>
+        <div class="zone-info">Tables 1–10 · Natural light</div>
+        <div class="zone-avail avail-high">8 available</div>
+      </div>
+      <div class="card-3d zone-card" style="--delay:0.1s">
+        <div class="zone-icon">🤫</div>
+        <div class="zone-name">Silent Zone</div>
+        <div class="zone-info">Tables 11–22 · No talking</div>
+        <div class="zone-avail avail-med">5 available</div>
+      </div>
+      <div class="card-3d zone-card" style="--delay:0.2s">
+        <div class="zone-icon">👥</div>
+        <div class="zone-name">Group Zone</div>
+        <div class="zone-info">Tables 23–30 · Collaborative</div>
+        <div class="zone-avail avail-low">2 available</div>
+      </div>
+      <div class="card-3d zone-card" style="--delay:0.3s">
+        <div class="zone-icon">⚡</div>
+        <div class="zone-name">Power Zone</div>
+        <div class="zone-info">Tables 31–39 · Power outlets</div>
+        <div class="zone-avail avail-high">6 available</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING PAGE -->
+  <div id="page-booking" class="page">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions" id="nav-actions-booking">
+        <button class="btn-ghost" onclick="showAdminPage()">Admin</button>
+        <button class="btn-ghost" onclick="showPage('page-login')">Sign In to Book</button>
+      </div>
+    </nav>
+
+    <div class="booking-container">
+      <div class="booking-header">
+        <h2 class="section-title">Select Your <span class="gradient-text">Table</span></h2>
+        <p class="section-sub">Choose a date, time slot, and your preferred table below</p>
+      </div>
+
+      <!-- Date & Time Picker -->
+      <div class="date-time-bar">
+        <div class="dt-group">
+          <label>📅 Date</label>
+          <input type="date" id="booking-date" class="dt-input" />
+        </div>
+        <div class="dt-group">
+          <label>⏰ Time Slot</label>
+          <select id="booking-time" class="dt-input">
+            <option value="">Select time</option>
+            <option>08:00 AM – 10:00 AM</option>
+            <option>10:00 AM – 12:00 PM</option>
+            <option>12:00 PM – 02:00 PM</option>
+            <option>02:00 PM – 04:00 PM</option>
+            <option>04:00 PM – 06:00 PM</option>
+            <option>06:00 PM – 08:00 PM</option>
+            <option>08:00 PM – 10:00 PM</option>
+          </select>
+        </div>
+        <div class="dt-group">
+          <label>🏷️ Zone Filter</label>
+          <select id="zone-filter" class="dt-input" onchange="filterZone()">
+            <option value="all">All Zones</option>
+            <option value="window">🪟 Window</option>
+            <option value="silent">🤫 Silent</option>
+            <option value="group">👥 Group</option>
+            <option value="power">⚡ Power</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="spec-strip">
+        <span>❄️ AC Room</span><span>💡 Special Spotlight</span><span>📶 Free WiFi</span><span>🔌 Laptop Charging Point</span><span>📱 PhonePe Payment</span>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot available"></div>Available
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot selected"></div>Your Selection
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot booked"></div>Booked
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot maintenance"></div>Maintenance
+        </div>
+      </div>
+
+      <!-- Library Floor Map -->
+      <div class="library-map">
+        <!-- Entry / Reception -->
+        <div class="map-label entry-label">🚪 Main Entrance</div>
+
+        <!-- Zone: Window (1–10) -->
+        <div class="zone-section" id="zone-window" data-zone="window">
+          <div class="zone-header">🪟 Window Zone — Tables 1 to 10</div>
+          <div class="tables-grid">
+            <!-- Tables 1–5 (window row) -->
+            <div class="table-row">
+              <div class="window-bar">🪟 Window Wall</div>
+              <div class="tables-inline">
+                <div class="table-unit available" data-table="1" data-zone="window" onclick="selectTable(this)">
+                  <div class="table-3d">
+                    <div class="table-top">
+                      <span class="table-num">T1</span>
+                      <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                    </div>
+                    <div class="table-shadow"></div>
+                  </div>
+                  <div class="table-tag">2 seats</div>
+                </div>
+                <div class="table-unit available" data-table="2" data-zone="window" onclick="selectTable(this)">
+                  <div class="table-3d">
+                    <div class="table-top"><span class="table-num">T2</span>
+                      <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                    </div>
+                    <div class="table-shadow"></div>
+                  </div>
+                  <div class="table-tag">2 seats</div>
+                </div>
+                <div class="table-unit booked" data-table="3" data-zone="window">
+                  <div class="table-3d">
+                    <div class="table-top"><span class="table-num">T3</span>
+                      <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                    </div>
+                    <div class="table-shadow"></div>
+                  </div>
+                  <div class="table-tag">Booked</div>
+                </div>
+                <div class="table-unit available" data-table="4" data-zone="window" onclick="selectTable(this)">
+                  <div class="table-3d">
+                    <div class="table-top"><span class="table-num">T4</span>
+                      <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                    </div>
+                    <div class="table-shadow"></div>
+                  </div>
+                  <div class="table-tag">2 seats</div>
+                </div>
+                <div class="table-unit available" data-table="5" data-zone="window" onclick="selectTable(this)">
+                  <div class="table-3d">
+                    <div class="table-top"><span class="table-num">T5</span>
+                      <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                    </div>
+                    <div class="table-shadow"></div>
+                  </div>
+                  <div class="table-tag">2 seats</div>
+                </div>
+              </div>
+            </div>
+            <div class="tables-inline mt-row">
+              <div class="table-unit booked" data-table="6" data-zone="window">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T6</span>
+                    <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">Booked</div>
+              </div>
+              <div class="table-unit available" data-table="7" data-zone="window" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T7</span>
+                    <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">2 seats</div>
+              </div>
+              <div class="table-unit available" data-table="8" data-zone="window" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T8</span>
+                    <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">2 seats</div>
+              </div>
+              <div class="table-unit maintenance" data-table="9" data-zone="window">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T9</span></div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">🔧 Maint.</div>
+              </div>
+              <div class="table-unit available" data-table="10" data-zone="window" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T10</span>
+                    <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">2 seats</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aisle -->
+        <div class="aisle"><span>— — — Aisle — — —</span></div>
+
+        <!-- Zone: Silent (11–22) -->
+        <div class="zone-section" id="zone-silent" data-zone="silent">
+          <div class="zone-header">🤫 Silent Zone — Tables 11 to 22</div>
+          <div class="tables-grid">
+            <div class="tables-inline">
+              <div class="table-unit available" data-table="11" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T11</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit booked" data-table="12" data-zone="silent">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T12</span></div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">Booked</div>
+              </div>
+              <div class="table-unit available" data-table="13" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T13</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit available" data-table="14" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T14</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit booked" data-table="15" data-zone="silent">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T15</span></div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">Booked</div>
+              </div>
+              <div class="table-unit available" data-table="16" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T16</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+            </div>
+            <div class="tables-inline mt-row">
+              <div class="table-unit available" data-table="17" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T17</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit booked" data-table="18" data-zone="silent">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T18</span></div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">Booked</div>
+              </div>
+              <div class="table-unit booked" data-table="19" data-zone="silent">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T19</span></div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">Booked</div>
+              </div>
+              <div class="table-unit available" data-table="20" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T20</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit available" data-table="21" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T21</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+              <div class="table-unit available" data-table="22" data-zone="silent" onclick="selectTable(this)">
+                <div class="table-3d">
+                  <div class="table-top"><span class="table-num">T22</span>
+                    <div class="seat-dots"><span class="seat-dot"></span></div>
+                  </div>
+                  <div class="table-shadow"></div>
+                </div>
+                <div class="table-tag">1 seat</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aisle -->
+        <div class="aisle"><span>— — — Aisle — — —</span></div>
+
+        <!-- Zone: Group (23–30) -->
+        <div class="zone-section" id="zone-group" data-zone="group">
+          <div class="zone-header">👥 Group Zone — Tables 23 to 30</div>
+          <div class="tables-inline">
+            <div class="table-unit booked large-table" data-table="23" data-zone="group">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T23</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span><span
+                      class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">Booked</div>
+            </div>
+            <div class="table-unit available large-table" data-table="24" data-zone="group" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T24</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span><span
+                      class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">4 seats</div>
+            </div>
+            <div class="table-unit available large-table" data-table="25" data-zone="group" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T25</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span><span
+                      class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">4 seats</div>
+            </div>
+            <div class="table-unit booked large-table" data-table="26" data-zone="group">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T26</span></div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">Booked</div>
+            </div>
+            <div class="table-unit booked large-table" data-table="27" data-zone="group">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T27</span></div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">Booked</div>
+            </div>
+            <div class="table-unit available large-table" data-table="28" data-zone="group" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T28</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span><span
+                      class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">4 seats</div>
+            </div>
+            <div class="table-unit available large-table" data-table="29" data-zone="group" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T29</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span><span
+                      class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">4 seats</div>
+            </div>
+            <div class="table-unit maintenance large-table" data-table="30" data-zone="group">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T30</span></div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">🔧 Maint.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aisle -->
+        <div class="aisle"><span>— — — Aisle — — —</span></div>
+
+        <!-- Zone: Power (31–39) -->
+        <div class="zone-section" id="zone-power" data-zone="power">
+          <div class="zone-header">⚡ Power Zone — Tables 31 to 39 (Outlets Available)</div>
+          <div class="tables-inline">
+            <div class="table-unit available power-table" data-table="31" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T31</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit available power-table" data-table="32" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T32</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit booked power-table" data-table="33" data-zone="power">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T33</span></div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">Booked</div>
+            </div>
+            <div class="table-unit available power-table" data-table="34" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T34</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit available power-table" data-table="35" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T35</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit booked power-table" data-table="36" data-zone="power">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T36</span></div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">Booked</div>
+            </div>
+            <div class="table-unit available power-table" data-table="37" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T37</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit available power-table" data-table="38" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T38</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+            <div class="table-unit available power-table" data-table="39" data-zone="power" onclick="selectTable(this)">
+              <div class="table-3d">
+                <div class="table-top"><span class="table-num">T39</span>
+                  <div class="seat-dots"><span class="seat-dot"></span><span class="seat-dot"></span></div>
+                </div>
+                <div class="table-shadow"></div>
+              </div>
+              <div class="table-tag">⚡ 2 seats</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Summary Panel (slides up) -->
+    <div id="booking-summary" class="booking-summary hidden">
+      <div class="summary-inner">
+        <div class="summary-info">
+          <span class="summary-icon">🪑</span>
+          <div>
+            <div class="summary-table" id="summary-table-name">Table Selected</div>
+            <div class="summary-meta" id="summary-table-meta">Zone · Seats</div>
+          </div>
+        </div>
+        <label class="plan-picker">Subscription plan <select id="plan-select" class="dt-input"><option value="1" data-price="1000">1 Month — ₹1000</option><option value="2" data-price="2700">3 Months — ₹2700</option><option value="3" data-price="10000">1 Year — ₹10000</option></select></label>
+        <button class="btn-cta" onclick="proceedToAuth()">
+          <span>Proceed to Book</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGIN PAGE -->
+  <div id="page-login" class="page">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span><span class="logo-text">saraswati library</span>
+      </div>
+    </nav>
+
+    <div class="auth-container">
+      <div class="auth-card card-3d-static">
+        <div class="auth-header">
+          <div class="auth-avatar">📚</div>
+          <h2>Welcome Back</h2>
+          <p>Sign in to manage your bookings</p>
+        </div>
+
+        <div class="auth-body">
+          <div class="input-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="login-email" placeholder="you@example.com" class="auth-input" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="login-password" placeholder="••••••••" class="auth-input" />
+            </div>
+          </div>
+          <div class="auth-meta">
+            <label class="checkbox-label"><input type="checkbox"> Remember me</label>
+            <a href="#" class="link-text">Forgot password?</a>
+          </div>
+          <button class="btn-cta full-width" onclick="handleLogin()">
+            <span>Sign In</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div class="auth-divider"><span>or</span></div>
+          <p class="auth-switch">New to saraswati library? <a href="#" class="link-text"
+              onclick="showPage('page-register')">Create an account →</a></p>
+
+          <div class="auth-back">
+            <button class="btn-ghost small" onclick="returnToBooking()">← Back to Table Selection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER PAGE -->
+  <div id="page-register" class="page">
+    <div class="bg-orbs">
+      <div class="orb orb2"></div>
+      <div class="orb orb3"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span><span class="logo-text">saraswati library</span>
+      </div>
+    </nav>
+
+    <div class="auth-container">
+      <div class="auth-card card-3d-static">
+        <div class="auth-header">
+          <div class="auth-avatar">✨</div>
+          <h2>Create Account</h2>
+          <p>Join saraswati library and start booking</p>
+        </div>
+
+        <div class="auth-body">
+          <div class="form-row">
+            <div class="input-group">
+              <label>First Name</label>
+              <div class="input-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="reg-first" placeholder="Aarav" class="auth-input" />
+              </div>
+            </div>
+            <div class="input-group">
+              <label>Last Name</label>
+              <div class="input-wrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="reg-last" placeholder="Shah" class="auth-input" />
+              </div>
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Student / Staff ID</label>
+            <div class="input-wrap">
+              <span class="input-icon">🎓</span>
+              <input type="text" placeholder="LIB-2024-XXXX" class="auth-input" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="reg-email" placeholder="you@college.edu" class="auth-input" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Phone Number</label>
+            <div class="input-wrap">
+              <span class="input-icon">📱</span>
+              <input type="tel" id="reg-phone" placeholder="+91 98765 43210" class="auth-input" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="reg-password" placeholder="Min. 8 characters" class="auth-input" />
+            </div>
+          </div>
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div class="strength-fill" style="width:0%"></div>
+            </div>
+            <span class="strength-label">Enter a password</span>
+          </div>
+
+          <label class="checkbox-label terms">
+            <input type="checkbox" id="terms-check">
+            I agree to the <a href="#" class="link-text">Library Rules</a> and <a href="#" class="link-text">Terms of
+              Use</a>
+          </label>
+
+          <button class="btn-cta full-width" onclick="handleRegister()">
+            <span>Create Account</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div class="auth-divider"><span>or</span></div>
+          <p class="auth-switch">Already registered? <a href="#" class="link-text" onclick="showPage('page-login')">Sign
+              in →</a></p>
+
+          <div class="auth-back">
+            <button class="btn-ghost small" onclick="returnToBooking()">← Back to Table Selection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRMATION PAGE -->
+  <div id="page-confirm" class="page">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span><span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions" id="nav-actions-confirm">
+        <!-- dynamically filled by updateNavbars() -->
+      </div>
+    </nav>
+
+    <div class="confirm-container">
+      <div class="confirm-card">
+        <div class="confirm-animation">
+          <div class="checkmark-circle">
+            <svg class="checkmark" viewBox="0 0 52 52">
+              <circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none" />
+              <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+            </svg>
+          </div>
+        </div>
+        <h2 class="confirm-title">Booking Confirmed!</h2>
+        <p class="confirm-sub">Your table is reserved. See you at the library!</p>
+
+        <div class="booking-ticket">
+          <div class="ticket-header">
+            <span>📚 saraswati library</span>
+            <span class="ticket-id" id="confirm-ticket-id">#SL-000000</span>
+          </div>
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span class="ticket-label">Table</span>
+              <span class="ticket-value" id="confirm-table">Table 7 — Window Zone</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Date</span>
+              <span class="ticket-value" id="confirm-date">Today</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Time</span>
+              <span class="ticket-value" id="confirm-time">10:00 AM – 12:00 PM</span>
+            </div>
+            <div class="ticket-row"><span class="ticket-label">Plan / Payment</span><span class="ticket-value" id="confirm-payment">PhonePe pending</span></div>
+            <div class="ticket-row">
+              <span class="ticket-label">Student</span>
+              <span class="ticket-value" id="confirm-student">Member</span>
+            </div>
+          </div>
+          <div class="ticket-barcode">
+            <div class="barcode-lines"></div>
+            <span class="barcode-text" id="confirm-barcode-text">SL00000000T00</span>
+          </div>
+        </div>
+
+        <div class="confirm-actions">
+          <button class="btn-cta" onclick="showPage('page-landing')">← Back to Home</button>
+          <button class="btn-ghost" onclick="showPage('page-booking')">Book Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL PAGE -->
+  <div id="page-admin" class="page">
+    <div class="bg-orbs">
+      <div class="orb orb1"></div>
+      <div class="orb orb2"></div>
+    </div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span><span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions" id="nav-actions-admin">
+        <!-- populated dynamically -->
+      </div>
+    </nav>
+
+    <div class="admin-shell">
+      <div class="auth-back" style="text-align: left; margin-bottom: 24px;">
+        <button class="btn-ghost small" onclick="showPage('page-booking')">← Back to Table Selection</button>
+      </div>
+      <h1 class="gradient-text" style="font-size: 36px; font-weight: 900; margin-bottom: 12px;">Admin Control Panel</h1>
+      <p style="color: var(--text-muted); margin-bottom: 32px;">Change table permissions/status for window side, silent, group and power zones. Free or alter reservations.</p>
+
+      <h2>Tables</h2>
+      <div class="admin-grid" id="admin-tables-grid" style="margin-top: 14px; margin-bottom: 36px;">
+        <!-- populated dynamically by JS -->
+      </div>
+
+      <h2>Reservations</h2>
+      <div class="admin-list" id="admin-reservations-list" style="margin-top: 14px;">
+        <!-- populated dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       UPI PAYMENT MODAL — slides up after table booking is confirmed
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="upi-modal" class="upi-modal hidden" role="dialog" aria-modal="true" aria-label="UPI Payment">
+    <div class="upi-modal-backdrop" onclick="closePaymentModal()"></div>
+    <div class="upi-modal-sheet">
+
+      <!-- Header -->
+      <div class="upi-modal-header">
+        <div class="upi-drag-bar"></div>
+        <button class="upi-close-btn" onclick="closePaymentModal()" aria-label="Close payment">✕</button>
+        <div class="upi-header-info">
+          <div class="upi-lock-badge">🔒 Secure UPI Payment</div>
+          <div class="upi-amount" id="upi-display-amount">₹1,000</div>
+          <div class="upi-payee">To: <strong id="upi-payee-name">Saraswati Library</strong></div>
+          <div class="upi-ref">Ref: <span id="upi-order-ref" class="mono">—</span></div>
+        </div>
+      </div>
+
+      <!-- ── STATE: SCAN QR ── -->
+      <div id="upi-state-scan" class="upi-state">
+        <!-- Countdown timer -->
+        <div class="upi-timer-wrap">
+          <div class="upi-timer-bar-track">
+            <div class="upi-timer-bar" id="upi-timer-bar"></div>
+          </div>
+          <span class="upi-timer-text" id="upi-timer-text">15:00 remaining</span>
+        </div>
+
+        <!-- QR Code -->
+        <div class="upi-qr-container">
+          <div class="upi-qr-glow"></div>
+          <div id="upi-qr-canvas" class="upi-qr-canvas"></div>
+          <div class="upi-qr-label">Scan with any UPI app</div>
+        </div>
+
+        <!-- App buttons -->
+        <div class="upi-apps-label">Or open directly in your UPI app</div>
+        <div class="upi-apps-grid">
+          <button class="upi-app-btn gpay" onclick="openUpiApp('gpay')" id="btn-gpay">
+            <span class="upi-app-icon">G</span>
+            <span>Google Pay</span>
+          </button>
+          <button class="upi-app-btn phonepe" onclick="openUpiApp('phonepe')" id="btn-phonepe">
+            <svg class="upi-app-icon svg-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+            <span>PhonePe</span>
+          </button>
+          <button class="upi-app-btn paytm" onclick="openUpiApp('paytm')" id="btn-paytm">
+            <span class="upi-app-icon">P</span>
+            <span>Paytm</span>
+          </button>
+          <button class="upi-app-btn bhim" onclick="openUpiApp('bhim')" id="btn-bhim">
+            <span class="upi-app-icon">B</span>
+            <span>BHIM</span>
+          </button>
+        </div>
+
+        <!-- UTR entry form -->
+        <div class="upi-utr-section">
+          <div class="upi-utr-label">
+            After paying, enter the <strong>UTR / Reference number</strong> from your UPI app
+          </div>
+          <div class="upi-utr-form">
+            <div class="upi-utr-input-wrap">
+              <span class="upi-utr-icon">🔢</span>
+              <input
+                type="text"
+                id="upi-utr-input"
+                class="upi-utr-input"
+                placeholder="e.g. 412345678901"
+                maxlength="22"
+                autocomplete="off"
+                autocorrect="off"
+                spellcheck="false"
+                inputmode="text"
+                oninput="onUtrInput(this)"
+              />
+            </div>
+            <select id="upi-app-select" class="upi-app-select dt-input">
+              <option value="gpay">Google Pay</option>
+              <option value="phonepe">PhonePe</option>
+              <option value="paytm">Paytm</option>
+              <option value="bhim">BHIM</option>
+              <option value="other">Other UPI App</option>
+            </select>
+            <button class="btn-cta full-width" id="upi-submit-btn" onclick="submitUtr()" disabled>
+              <span>Submit Payment</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+          <p class="upi-utr-help">
+            📱 Where to find UTR: Open your UPI app → Payments → Transaction Details → UTR/Reference No.
+          </p>
+        </div>
+
+        <button class="upi-cancel-link" onclick="cancelPayment()">Cancel booking</button>
+      </div>
+
+      <!-- ── STATE: SUBMITTING ── -->
+      <div id="upi-state-submitting" class="upi-state hidden">
+        <div class="upi-spinner-wrap">
+          <div class="upi-spinner"></div>
+          <div class="upi-spinner-text">Submitting payment details…</div>
+        </div>
+      </div>
+
+      <!-- ── STATE: PENDING VERIFICATION ── -->
+      <div id="upi-state-pending" class="upi-state hidden">
+        <div class="upi-pending-icon">⏳</div>
+        <h3 class="upi-state-title">Payment Under Verification</h3>
+        <p class="upi-state-sub">
+          Your payment details have been submitted. Our team is verifying your payment.
+          This typically takes <strong>5–15 minutes</strong> during business hours.
+        </p>
+        <div class="upi-pending-card" id="upi-pending-details">
+          <!-- filled by JS -->
+        </div>
+        <div class="upi-pending-note">
+          🔔 Your table is <strong>held</strong> while we verify. If payment fails verification, the slot will be released.
+        </div>
+        <div class="upi-state-actions">
+          <button class="btn-cta" onclick="closePaymentModal(); showPage('page-landing')">Back to Home</button>
+          <button class="btn-ghost" onclick="pollNow()">Check Status Again</button>
+        </div>
+      </div>
+
+      <!-- ── STATE: SUCCESS ── -->
+      <div id="upi-state-success" class="upi-state hidden">
+        <div class="upi-success-anim">
+          <div class="upi-checkmark-circle">
+            <svg class="upi-checkmark" viewBox="0 0 52 52">
+              <circle class="upi-checkmark-bg" cx="26" cy="26" r="25" fill="none"/>
+              <path class="upi-checkmark-tick" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+          </div>
+        </div>
+        <h3 class="upi-state-title" style="color: var(--emerald)">Payment Confirmed!</h3>
+        <p class="upi-state-sub">Your table has been successfully booked.</p>
+
+        <div class="upi-receipt">
+          <div class="upi-receipt-header">
+            <span>📚 Saraswati Library</span>
+            <span class="upi-receipt-id" id="upi-receipt-ref">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Amount Paid</span>
+            <span id="upi-receipt-amount" class="upi-receipt-val green">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Table</span>
+            <span id="upi-receipt-table" class="upi-receipt-val">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Date &amp; Time</span>
+            <span id="upi-receipt-datetime" class="upi-receipt-val">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>UTR Number</span>
+            <span id="upi-receipt-utr" class="upi-receipt-val mono">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Paid via</span>
+            <span id="upi-receipt-app" class="upi-receipt-val">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Recipient</span>
+            <span id="upi-receipt-payee" class="upi-receipt-val">—</span>
+          </div>
+          <div class="upi-receipt-row">
+            <span>Payment Time</span>
+            <span id="upi-receipt-time" class="upi-receipt-val">—</span>
+          </div>
+        </div>
+
+        <div class="upi-state-actions">
+          <button class="btn-cta" onclick="closePaymentModal(); showPage('page-landing')">
+            ← Back to Home
+          </button>
+          <button class="btn-ghost" onclick="closePaymentModal(); showPage('page-booking')">
+            Book Another
+          </button>
+        </div>
+      </div>
+
+      <!-- ── STATE: FAILED / EXPIRED ── -->
+      <div id="upi-state-failed" class="upi-state hidden">
+        <div class="upi-fail-icon">❌</div>
+        <h3 class="upi-state-title" style="color: var(--rose)" id="upi-fail-title">Payment Failed</h3>
+        <p class="upi-state-sub" id="upi-fail-msg">
+          We could not verify your payment. The booking slot has been released.
+        </p>
+        <div class="upi-fail-reasons">
+          <p>Common reasons:</p>
+          <ul>
+            <li>Payment was not completed in the UPI app</li>
+            <li>Wrong UTR / reference number entered</li>
+            <li>Payment was cancelled or timed out</li>
+          </ul>
+        </div>
+        <div class="upi-state-actions">
+          <button class="btn-cta" onclick="retryPayment()">Try Again</button>
+          <button class="btn-ghost" onclick="closePaymentModal()">Choose Different Table</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       QR CODE GENERATOR PAGE
+       ══════════════════════════════════════════════════════════════════════ -->
+  <div id="page-qrgen" class="page">
+    <div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span>
+        <span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost small" onclick="showPage('page-landing')">← Back</button>
+      </div>
+    </nav>
+    <div class="qrgen-container">
+      <div class="qrgen-card">
+        <div class="auth-header">
+          <div class="auth-avatar">📲</div>
+          <h2>Generate Payment QR</h2>
+          <p>Create a UPI QR code for custom amount collection</p>
+        </div>
+        <div class="auth-body">
+          <div class="input-group">
+            <label>Amount (₹)</label>
+            <div class="input-wrap">
+              <span class="input-icon">₹</span>
+              <input type="number" id="qrgen-amount" class="auth-input" placeholder="1000" min="1" max="100000" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Description (optional)</label>
+            <div class="input-wrap">
+              <span class="input-icon">📝</span>
+              <input type="text" id="qrgen-desc" class="auth-input" placeholder="e.g. Table Booking — June" maxlength="60" />
+            </div>
+          </div>
+          <button class="btn-cta full-width" onclick="generateQRCode()">
+            <span>Generate QR Code</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </button>
+
+          <div id="qrgen-output" class="qrgen-output hidden">
+            <div class="qrgen-qr-wrap">
+              <div id="qrgen-canvas"></div>
+            </div>
+            <div class="qrgen-info">
+              <div class="qrgen-amount-display" id="qrgen-amount-display">₹—</div>
+              <div class="qrgen-upi-display">UPI: <span id="qrgen-upi-display" class="mono">—</span></div>
+            </div>
+            <button class="btn-ghost" onclick="downloadQR()" style="width:100%;margin-top:12px;">
+              ⬇ Download QR
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MY BOOKINGS PAGE -->
+  <div id="page-my-bookings" class="page">
+    <div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
+    <nav class="navbar">
+      <div class="logo" onclick="showPage('page-landing')" style="cursor:pointer">
+        <span class="logo-icon">📚</span><span class="logo-text">saraswati library</span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost small" onclick="showPage('page-booking')">+ New Booking</button>
+        <button class="btn-ghost small" onclick="handleLogout()">Sign Out</button>
+      </div>
+    </nav>
+    <div class="mybookings-container">
+      <div class="mybookings-header">
+        <h2 class="section-title">My <span class="gradient-text">Bookings</span></h2>
+        <p class="section-sub" id="mybookings-username">Your reservation history</p>
+      </div>
+      <div id="mybookings-list" class="mybookings-list">
+        <div class="mybookings-loading">⏳ Loading your bookings…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- QR Code library (lightweight, CSP-safe) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+          integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSe2HFFfLnLo8tQ9aq6mYh8+5MF61dWLMDMQ=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

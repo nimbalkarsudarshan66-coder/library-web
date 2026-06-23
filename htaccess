@@ -1,0 +1,159 @@
+# ============================================================
+#  Saraswati Library — Apache / LiteSpeed Production Config
+#  Place this file in the website root directory.
+#
+#  Tested with Apache 2.4 + mod_rewrite + mod_headers + mod_expires
+#  Also works on LiteSpeed / cPanel shared hosting.
+# ============================================================
+
+# ── Turn off directory listings ──────────────────────────────
+Options -Indexes -MultiViews
+ServerSignature Off
+
+# ── Force HTTPS (uncomment after SSL is active) ──────────────
+RewriteEngine On
+# Uncomment these 3 lines once you have an SSL certificate:
+# RewriteCond %{HTTPS} off
+# RewriteCond %{HTTP_HOST} !^localhost [NC]
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ── Block access to sensitive files ─────────────────────────
+# Never let users download config, DB setup, or payment files
+<FilesMatch "^(config|db|payment)\.php$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Block dotfiles (.env, .gitignore, .htpasswd, etc.)
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Block sensitive file extensions
+<FilesMatch "\.(env|sql|log|bak|backup|sh|md|json|lock|git|yml|yaml|ini|conf|dist)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# ── Security Headers ─────────────────────────────────────────
+<IfModule mod_headers.c>
+    # Prevent clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Prevent MIME sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    # XSS protection for older browsers
+    Header always set X-XSS-Protection "1; mode=block"
+    # Referrer policy
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Disable browser features that aren't needed
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+    # HSTS — force HTTPS for 1 year (enable after SSL is confirmed working)
+    # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+    # Content Security Policy
+    # Allows: self, Google Fonts, Cloudflare CDN (qrcode.js)
+    # unsafe-inline is required for inline onclick handlers in the HTML
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; font-src https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; form-action 'self'; base-uri 'self';"
+
+    # Remove server information headers
+    Header always unset Server
+    Header always unset X-Powered-By
+</IfModule>
+
+# ── PHP production settings ──────────────────────────────────
+<IfModule mod_php.c>
+    php_flag  display_errors         Off
+    php_flag  display_startup_errors Off
+    php_flag  log_errors             On
+    php_value error_reporting        0
+    php_value session.cookie_httponly 1
+    php_value session.cookie_samesite Strict
+    php_flag  session.use_strict_mode 1
+    php_value upload_max_filesize    2M
+    php_value post_max_size          4M
+    php_value max_execution_time     30
+    php_value memory_limit           128M
+</IfModule>
+
+# ── Browser caching for static assets ───────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css              "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png             "access plus 1 year"
+    ExpiresByType image/jpeg            "access plus 1 year"
+    ExpiresByType image/gif             "access plus 1 year"
+    ExpiresByType image/svg+xml         "access plus 1 year"
+    ExpiresByType image/webp            "access plus 1 year"
+    ExpiresByType image/x-icon          "access plus 1 year"
+    ExpiresByType font/woff2            "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+</IfModule>
+
+# Add cache-control headers
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header append Cache-Control "public, must-revalidate"
+    </FilesMatch>
+    <FilesMatch "\.(png|jpg|jpeg|gif|svg|webp|ico|woff|woff2)$">
+        Header append Cache-Control "public, immutable"
+    </FilesMatch>
+    # Never cache PHP responses
+    <FilesMatch "\.php$">
+        Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header always set Pragma "no-cache"
+        Header always set Expires "Thu, 01 Jan 1970 00:00:00 GMT"
+    </FilesMatch>
+</IfModule>
+
+# ── Compression ──────────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript
+    AddOutputFilterByType DEFLATE application/json text/plain
+</IfModule>
+
+# ── Custom error pages ───────────────────────────────────────
+ErrorDocument 400 /error.php
+ErrorDocument 403 /error.php
+ErrorDocument 404 /error.php
+ErrorDocument 429 /error.php
+ErrorDocument 500 /error.php
+
+# ── Block common attack patterns ─────────────────────────────
+RewriteEngine On
+
+# Block SQL injection patterns in query string
+RewriteCond %{QUERY_STRING} (union.*select|select.*from|insert.*into|delete.*from|drop.*table) [NC]
+RewriteRule ^ /error.php [L,R=400]
+
+# Block XSS in query string
+RewriteCond %{QUERY_STRING} (<script|javascript:|vbscript:|onload=|onerror=) [NC]
+RewriteRule ^ /error.php [L,R=400]
+
+# Block null bytes
+RewriteCond %{QUERY_STRING} \0 [NC]
+RewriteRule ^ /error.php [L,R=400]
+
+# Block access to version control directories
+RewriteRule ^\.git / [F,L]
+
+# ── Limit request methods ────────────────────────────────────
+# Only allow GET, POST, HEAD, OPTIONS
+RewriteCond %{REQUEST_METHOD} !^(GET|POST|HEAD|OPTIONS)$
+RewriteRule .* - [F]

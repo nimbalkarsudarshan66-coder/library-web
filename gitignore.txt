@@ -1,0 +1,16 @@
+# ── Git — never commit these ──────────────────────────────────────────────────
+.env
+*.env.local
+*.env.production
+
+# ── OS / Editor junk ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# ── PHP vendor / composer (if added later) ───────────────────────────────────
+vendor/
+composer.lock
