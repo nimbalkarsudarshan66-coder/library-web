@@ -837,6 +837,7 @@ body {
 
 /* State containers */
 .upi-state { padding: 20px 24px 28px; }
+.upi-state.hidden { display: none !important; }
 
 /* Countdown timer */
 .upi-timer-wrap { margin-bottom: 16px; }
@@ -1291,17 +1292,67 @@ body {
   .upi-apps-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .upi-app-btn { padding: 10px 4px; font-size: 10px; }
   .upi-app-icon { width: 30px; height: 30px; font-size: 13px; }
+  .date-time-bar { flex-direction: column; padding: 16px; }
+  .dt-group { min-width: 0; width: 100%; }
+  .tables-inline { justify-content: center; }
+  .summary-inner { align-items: stretch; }
+  .summary-inner .btn-cta { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 480px) {
   .preview-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
   .navbar .logo-text { font-size: 18px; }
   .hero-title { font-size: 30px; }
+  .navbar { align-items: flex-start; gap: 12px; flex-direction: column; }
+  .nav-actions { width: 100%; flex-wrap: wrap; }
+  .nav-actions button { flex: 1 1 auto; }
+  .hero { padding: 0 16px; }
+  .hero-subtitle { font-size: 15px; }
+  .booking-container { padding: 24px 12px 180px; }
+  .section-title { font-size: 28px; }
+  .library-map { padding: 14px 10px; }
+  .table-3d,
+  .table-top { width: 64px; }
+  .large-table .table-3d,
+  .large-table .table-top { width: 84px; }
   .upi-amount { font-size: 32px; }
+  .upi-modal-sheet {
+    border-radius: 20px 20px 0 0;
+    max-height: 100dvh;
+  }
+  .upi-modal-header { padding: 8px 16px 16px; }
+  .upi-state { padding: 16px 16px 22px; }
+  .upi-qr-canvas {
+    width: min(220px, 72vw);
+    height: min(220px, 72vw);
+    min-height: 0;
+  }
+  .upi-qr-canvas canvas,
+  .upi-qr-canvas img {
+    max-width: 100%;
+    height: auto !important;
+  }
   .upi-apps-grid { grid-template-columns: repeat(2, 1fr); }
+  .upi-utr-section { padding: 14px; }
+  .upi-utr-input { font-size: 16px; letter-spacing: 1px; }
+  .upi-pending-row,
+  .upi-receipt-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
   .upi-state-actions { flex-direction: column; }
   .upi-state-actions .btn-cta,
   .upi-state-actions .btn-ghost { width: 100%; }
+  .toast {
+    bottom: 18px;
+    left: 12px;
+    right: 12px;
+    transform: translateY(20px);
+    white-space: normal;
+    text-align: center;
+  }
+  .toast.show { transform: translateY(0); }
 }
 
 /* ===== SCROLLBAR ===== */
